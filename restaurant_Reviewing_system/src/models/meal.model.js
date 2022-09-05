@@ -14,18 +14,7 @@ module.exports = function (app) {
     components:{type:String , required:true},
     image:{type:String, required:true },
     category:{type:mongoose.Schema.Types.ObjectId, required:true , ref:'menu'},
-    reviews:[
-      {
-        userID:{
-          type:mongoose.Schema.Types.ObjectId,
-          required:true,
-          ref:'users'
-        },
-        rate: { type:Number , enum:[-5,0,5], required:true},
-        comment:{type:String  },
-        image:{  data: Buffer,contentType: String }
-      }
-    ]
+  
   }, {
     timestamps: true
   });
