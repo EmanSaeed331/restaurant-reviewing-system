@@ -9,15 +9,14 @@ module.exports = function (app) {
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    text: { type: String, required: true },
     userId:{
       type:mongoose.Schema.Types.ObjectId,
       required:true,
       ref:'users'
     },
-    rate: { type:Number , enum:[-5,0,5], required:true},
-    comment:{type:String  },
-    image:{  data: Buffer,contentType: String } ,
+    rate: { type:Number , enum:[-5,0,5], required:true , default:0},
+    comment:{type:String , required:true  },
+    image:{ type: Buffer , contentType: 'string'} ,
     mealId:{type:mongoose.Schema.Types.ObjectId , required:true , ref:'meal'}, 
   }, {
     timestamps: true
@@ -31,18 +30,3 @@ module.exports = function (app) {
   return mongooseClient.model(modelName, schema);
   
 };
-
-/*
-
-  reviews:[
-      {
-        userID:{
-          type:mongoose.Schema.Types.ObjectId,
-          required:true,
-          ref:'users'
-        },
-        rate: { type:Number , enum:[-5,0,5], required:true},
-        comment:{type:String  },
-        image:{  data: Buffer,contentType: String }
-      }
-    ]*/ 
