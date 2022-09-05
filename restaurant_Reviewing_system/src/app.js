@@ -4,6 +4,7 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const logger = require('./logger');
+const redisCache = require('feathers-redis-cache');
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -55,5 +56,8 @@ app.use(express.notFound());
 app.use(express.errorHandler({ logger }));
 
 app.hooks(appHooks);
+app.configure(redisCache.client({ errorLogger: logger.error }));
+app.configure(redisCache.services({ pathPrefix: '/cache' }));
+
 
 module.exports = app;
