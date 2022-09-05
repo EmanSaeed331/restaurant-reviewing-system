@@ -2,12 +2,30 @@
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
+const { default: mongoose } = require('mongoose');
+
 module.exports = function (app) {
   const modelName = 'meal';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    text: { type: String, required: true }
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    components:{type:String , required:true},
+    image:{type:String, required:true },
+    category:{type:mongoose.Schema.Types.ObjectId, required:true , ref:'menu'},
+    reviews:[
+      {
+        userID:{
+          type:mongoose.Schema.Types.ObjectId,
+          required:true,
+          ref:'users'
+        },
+        rate: { type:Number , enum:[-5,0,5], required:true},
+        comment:{type:String  },
+        image:{  data: Buffer,contentType: String }
+      }
+    ]
   }, {
     timestamps: true
   });
