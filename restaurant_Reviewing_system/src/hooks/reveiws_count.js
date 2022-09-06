@@ -4,27 +4,19 @@
 // eslint-disable-next-line no-unused-vars
 module.exports = (options = {}) => {
   return async context => {
-    const { app} = context;
+
+    
+
+    const topPositive= await context.app.service('reviews').Model.aggregate().match({'rate':5});
+    context.result.topPositiveReviews = topPositive;
+    context.result.countOfPositiveReviews = topPositive.length;
+
+    const topNegative= await context.app.service('reviews').Model.aggregate().match({'rate':-5});
+    context.result.topNegativeReviews = topNegative;
+    context.result.countOfNegativeReviews = topNegative.length;
 
 
-    var {TopPositiveReviews,TopNegativeReviews }= context.params; 
-
-
-    if (context.params.rate == TopNegativeReviews)  
-    {
-      context.result = await app.service('reviews').Model.aggregate().match({'rate':-5});
-
-    }
-    else if (context.params.rate == TopPositiveReviews )  
-    {
-      context.result = await app.service('reviews').Model.aggregate().match({'rate':5});
-
-    }
-    else {
-      context.result = await app.service('reviews').Model.aggregate().match({'rate':0});
-
-    }
-      
-    return {...context};
+    return context; 
+   
   };
 };

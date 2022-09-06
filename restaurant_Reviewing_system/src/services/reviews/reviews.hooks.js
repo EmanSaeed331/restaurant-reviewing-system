@@ -4,10 +4,7 @@ const redisAfter = require('feathers-hooks-rediscache').redisAfterHook;
 const cache = require('feathers-hooks-rediscache').hookCache;
 
 const review = require('../../hooks/review');
-
-
 const reveiwsCount = require('../../hooks/reveiws_count');
-
 
 module.exports = {
   before: {
@@ -22,7 +19,11 @@ module.exports = {
 
   after: {
     all: [],
-    find: [cache({duration: 3600 * 12}), redisAfter(), reveiwsCount()],
+    find: [
+      cache({duration: 3600 * 12}),
+      redisAfter(),
+      reveiwsCount(),
+    ],
     get: [cache({duration: 3600 * 12}), redisAfter()],
     create: [],
     update: [],
