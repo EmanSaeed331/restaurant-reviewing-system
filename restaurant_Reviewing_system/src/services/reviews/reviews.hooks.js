@@ -5,10 +5,14 @@ const cache = require('feathers-hooks-rediscache').hookCache;
 
 const review = require('../../hooks/review');
 
+
+const reveiwsCount = require('../../hooks/reveiws_count');
+
+
 module.exports = {
   before: {
     all: [ authenticate('jwt') ],
-    find: [redisBefore()],
+    find: [],
     get: [redisBefore()],
     create: [review()],
     update: [],
@@ -18,7 +22,7 @@ module.exports = {
 
   after: {
     all: [],
-    find: [cache({duration: 3600 * 12}), redisAfter()],
+    find: [cache({duration: 3600 * 12}), redisAfter(), reveiwsCount()],
     get: [cache({duration: 3600 * 12}), redisAfter()],
     create: [],
     update: [],
