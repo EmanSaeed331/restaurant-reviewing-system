@@ -39,7 +39,7 @@ const sendEmail= () => {
 
 //  Cron Job 
 async function sendingReviewingEmail () {
-  cron.schedule('* * * * *',  async () => {
+  cron.schedule('* */12 * * *',  async () => {
     let ans = await sendEmail();
     console.log('CRNE JOB IS RUNNNG' + ans );
     await transporter.sendMail({
