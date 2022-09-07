@@ -5,8 +5,18 @@
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 
-
-module.exports = (options = {}) => {
+const cron = require('node-cron');
+var topPositiveRev ;
+var topNegativeRev;
+var transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth:{
+      api_key:process.env.SENDGRID,
+        
+    }
+  })
+);
+const sendEmail= () => {
 
   return async context => {
 
@@ -18,32 +28,29 @@ module.exports = (options = {}) => {
     context.result.topNegativeReviews = topNegative;
     context.result.countOfNegativeReviews = topNegative.length;
 
-    let topPositiveRev = topPositive.length;
-    let topNegativeRev = topNegative.length;
+    topPositiveRev = topPositive.length;
+    topNegativeRev = topNegative.length;
 
-    let transporter = nodemailer.createTransport(
-      sendgridTransport({
-        auth:{
-          api_key:process.env.SENDGRID,
-            
-        }
-      })
-    );
-   
-    context.result= await transporter.sendMail({
+ 
+  
+    return { context } ;
+  };
+};
+
+//  Cron Job 
+async function sendingReviewingEmail () {
+  cron.schedule('* * * * *',  async () => {
+    let ans = await sendEmail();
+    console.log('CRNE JOB IS RUNNNG' + ans );
+    await transporter.sendMail({
       from:'es9557403@gmail.com',
       to:'emansaeed5330@gmail.com',
       subject:' ⚡ Reviews of your restaurant ⚡' ,
       text:`<h1 top positive reviews >  ${topPositiveRev}`,
-      topPositiveReviews:topPositive , 
-      countOfPositiveReviews:topPositive.length,
-      topNegativeReviews:topNegative,
-      countOfNegativeReviews:topNegative.length,
-      html: `<p>  🟩 top positive reviews   ${topPositiveRev}</p>
-             <p>  🟥 top negative reviews   ${topNegativeRev}</p>`,
-     
-
+      html: `<p>  🟩 top positive reviews  ${topPositiveRev}</p>
+             <p>  🟥 top negative reviews  ${topNegativeRev}</p>`,
     });
-    return context;
-  };
-};
+  
+  });
+} 
+module.exports = sendingReviewingEmail;

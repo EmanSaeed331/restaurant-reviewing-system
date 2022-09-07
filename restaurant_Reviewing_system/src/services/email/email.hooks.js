@@ -1,6 +1,5 @@
-
-const sendEmail = require('../../hooks/send-email');
-
+/* const sendEmail = require('../../hooks/send-email');
+ */ 
 module.exports = {
   before: {
     all: [ ],
@@ -16,7 +15,7 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [sendEmail()],
+    create: [ /* sendEmail() */ ],
     update: [],
     patch: [],
     remove: []
