@@ -62,12 +62,6 @@ app.hooks(appHooks);
 
 // crone Job 
 sendingReviewingEmail();
-/* cron.schedule('* * * * *', async() => {
-  await sendEmail();
-  console.log('running on Sundays of January and September');
-});
- */
-
 
 app.configure(redisCache.client({ errorLogger: logger.error }));
 app.configure(redisCache.services({ pathPrefix: '/cache' }));

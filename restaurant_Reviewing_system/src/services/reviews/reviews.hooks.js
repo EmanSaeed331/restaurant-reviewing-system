@@ -5,13 +5,20 @@ const cache = require('feathers-hooks-rediscache').hookCache;
 
 const review = require('../../hooks/review');
 const reveiwsCount = require('../../hooks/reveiws_count');
+const dauria = require('dauria');
 
 module.exports = {
   before: {
     all: [ authenticate('jwt') ],
     find: [],
     get: [redisBefore()],
-    create: [review()],
+    create: [review() ,  function(context) {
+      if (!context.data.uri && context.params.file){
+        const file = context.params.file;
+        const uri = dauria.getBase64DataURI(file.buffer, file.mimetype);
+        context.data = {uri: uri};
+      }
+    } ],
     update: [],
     patch: [],
     remove: []
@@ -25,7 +32,7 @@ module.exports = {
       reveiwsCount(),
     ],
     get: [cache({duration: 3600 * 12}), redisAfter()],
-    create: [],
+    create: [review()],
     update: [],
     patch: [],
     remove: []

@@ -4,6 +4,8 @@ const {
   hashPassword, protect
 } = require('@feathersjs/authentication-local').hooks;
 
+const loginEvent = require('../../hooks/login-event');
+
 module.exports = {
   before: {
     all: [],
@@ -16,14 +18,12 @@ module.exports = {
   },
 
   after: {
-    all: [ 
-      // Make sure the password field is never sent to the client
-      // Always must be the last hook
-      protect('password')
-    ],
-    find: [],
+    all: [// Make sure the password field is never sent to the client
+    // Always must be the last hook
+      protect('password'), ],
+    find: [loginEvent()],
     get: [],
-    create: [],
+    create: [loginEvent()],
     update: [],
     patch: [],
     remove: []

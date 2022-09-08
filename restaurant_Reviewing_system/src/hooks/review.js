@@ -2,6 +2,9 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 // eslint-disable-next-line no-unused-vars
+
+const logger = require('../logger');
+//const auditModel = require('../models/audit.model');
 module.exports = (options = {}) => {
   return async context => {
     // data is the data that the client send to the server 
@@ -16,7 +19,7 @@ module.exports = (options = {}) => {
       ...context.data,
 
     };
-     
+    logger.info(' add new review' , context.data); 
     return context;
   };
 };
